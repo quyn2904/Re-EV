@@ -13,8 +13,10 @@ services:
     networks:
       - rev_network
     environment:
-      - ASPNETCORE_URLS=http://+:5001
       - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=${AUTH_CONNECTION_STRING}
+      - AutoMapper__LicenseKey=${AUTOMAPPER_LICENSE_KEY}
+      - ASPNETCORE_URLS=http://+:5001
 
   apigateway:
     container_name: apigateway

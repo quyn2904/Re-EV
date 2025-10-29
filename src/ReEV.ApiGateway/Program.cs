@@ -1,5 +1,3 @@
-using MMLib.SwaggerForOcelot.DependencyInjection;
-using MMLib.SwaggerForOcelot.Middleware;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Microsoft.OpenApi.Models;
