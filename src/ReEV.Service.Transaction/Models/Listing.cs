@@ -1,6 +1,4 @@
-﻿using ReEV.Common;
-
-namespace ReEV.Service.Transaction.Models
+﻿namespace ReEV.Service.Transaction.Models
 {
     public sealed class Listing : Entity
     {
@@ -8,10 +6,11 @@ namespace ReEV.Service.Transaction.Models
         public string MainImage { get; set; }
         public Guid SellerId { get; set; }
         public User Seller { get; set; } = null!;
+        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
-        private Listing(Guid listingId, string title, string mainImage, Guid sellerId)
+        private Listing(Guid id, string title, string mainImage, Guid sellerId)
         {
-            Id = listingId;
+            Id = id;
             Title = title;
             MainImage = mainImage;
             SellerId = sellerId;

@@ -1,0 +1,34 @@
+version: "3.8"
+
+networks:
+  rev_network:
+    driver: bridge
+
+services:
+  authservice:
+    container_name: authservice
+    build:
+      context: ./src
+      dockerfile: ReEV.Service.Auth/Dockerfile
+    networks:
+      - rev_network
+    environment:
+      - ASPNETCORE_URLS=http://+:5001
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  apigateway:
+    container_name: apigateway
+    build:
+      context: ./src
+      dockerfile: ReEV.ApiGateway/Dockerfile
+    ports:
+      - "5000:8080"
+    networks:
+      - rev_network
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./src/ReEV.ApiGateway/ocelot.json:/app/ocelot.json
+    depends_on:
+      - authservice

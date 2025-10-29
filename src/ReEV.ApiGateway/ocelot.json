@@ -1,0 +1,55 @@
+﻿{
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000"
+  },
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/auth/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "authservice",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/auth/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "SwaggerKey": "Auth"
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "authservice",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "SwaggerKey": "Users"
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "Users",
+      "Config": [
+        {
+          "Name": "API Users",
+          "Version": "v1",
+          "Url": "http://authservice:5001/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Auth",
+      "Config": [
+        {
+          "Name": "API Auth",
+          "Version": "v1",
+          "Url": "http://authservice:5001/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}
