@@ -18,9 +18,9 @@ namespace ReEV.Service.Transaction.Services
             _serviceProvider = serviceProvider;
             _connectionFactory = new ConnectionFactory
             {
-                HostName = configuration["RabbitMQ:Host"] ?? "rabbitmq",
-                UserName = configuration["RabbitMQ:User"] ?? "guest",
-                Password = configuration["RabbitMQ:Pass"] ?? "guest"
+                HostName = configuration["RabbitMQ:HostName"] ?? "rabbitmq",
+                UserName = configuration["RabbitMQ:UserName"] ?? "guest",
+                Password = configuration["RabbitMQ:Password"] ?? "guest",
             };
         }
 

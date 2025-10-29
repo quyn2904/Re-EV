@@ -15,9 +15,9 @@ namespace ReEV.Service.Auth.Services
         {
             _factory = new ConnectionFactory
             {
-                HostName = configuration["RabbitMQ:Host"] ?? "rabbitmq",
-                UserName = configuration["RabbitMQ:User"] ?? "guest",
-                Password = configuration["RabbitMQ:Pass"] ?? "guest",
+                HostName = configuration["RabbitMQ:HostName"] ?? "rabbitmq",
+                UserName = configuration["RabbitMQ:UserName"] ?? "guest",
+                Password = configuration["RabbitMQ:Password"] ?? "guest",
             };
 
             _connection = _factory.CreateConnectionAsync().GetAwaiter().GetResult();
