@@ -10,12 +10,6 @@ services:
       - rev_network
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=${AUTH_CONNECTION_STRING}
-      - AutoMapper__LicenseKey=${AUTOMAPPER_LICENSE_KEY}
-      - RabbitMQ__HostName=${RABBITMQ_HOSTNAME}
-      - RabbitMQ__UserName=${RABBITMQ_USERNAME}
-      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
-      - RabbitMQ__VirtualHost=/
       - ASPNETCORE_URLS=http://+:5001
     depends_on:
       rabbitmq:
@@ -30,12 +24,6 @@ services:
       - rev_network
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=${MARKETPLACE_CONNECTION_STRING}
-      - AutoMapper__LicenseKey=${AUTOMAPPER_LICENSE_KEY}
-      - RabbitMQ__HostName=${RABBITMQ_HOSTNAME}
-      - RabbitMQ__UserName=${RABBITMQ_USERNAME}
-      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
-      - RabbitMQ__VirtualHost=/
       - ASPNETCORE_URLS=http://+:5002
     depends_on:
       rabbitmq:
@@ -50,12 +38,6 @@ services:
       - rev_network
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=${TRANSACTION_CONNECTION_STRING}
-      - AutoMapper__LicenseKey=${AUTOMAPPER_LICENSE_KEY}
-      - RabbitMQ__HostName=${RABBITMQ_HOSTNAME}
-      - RabbitMQ__UserName=${RABBITMQ_USERNAME}
-      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
-      - RabbitMQ__VirtualHost=/
       - ASPNETCORE_URLS=http://+:5003
     depends_on:
       rabbitmq:
@@ -77,8 +59,6 @@ services:
       - ./src/ReEV.ApiGateway/ocelot.json:/app/ocelot.json
     depends_on:
       - authservice
-      - marketplaceservice
-      - transactionservice
 
   rabbitmq:
     container_name: rabbitmq
@@ -89,8 +69,9 @@ services:
     networks:
       - rev_network
     environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+      # User/pass mặc định: guest/guest (chỉ dùng cho dev)
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
       interval: 5s

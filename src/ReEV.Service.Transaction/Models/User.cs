@@ -8,17 +8,8 @@
         public ICollection<Order> OrdersAsBuyer { get; set; } = new List<Order>();
         public ICollection<Order> OrdersAsSeller { get; set; } = new List<Order>();
 
-        private User(Guid id, string fullName, string phoneNumber, string email)
+        public User()
         {
-            Id = id;
-            FullName = fullName;
-            PhoneNumber = phoneNumber;
-            Email = email;
-        }
-
-        public static User Create(Guid id, string fullName, string phoneNumber, string email)
-        {
-            return new User(id, fullName, phoneNumber, email);
         }
     }
 }

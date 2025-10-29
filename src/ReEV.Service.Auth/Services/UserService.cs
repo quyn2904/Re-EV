@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ReEV.Common.Contracts.Users;
 using ReEV.Service.Auth.DTOs;
 using ReEV.Service.Auth.Models;
 using ReEV.Service.Auth.Repositories;
@@ -9,11 +10,13 @@ namespace ReEV.Service.Auth.Services
     {
         private readonly IUserRepository _repository;
         private readonly IMapper _mapper;
+        private readonly RabbitMQPublisher _publisher;
 
-        public UserService(IUserRepository repository, IMapper mapper)
+        public UserService(IUserRepository repository, IMapper mapper, RabbitMQPublisher publisher)
         {
             _repository = repository;
             _mapper = mapper;
+            _publisher = publisher;
         }
 
         public async Task<PaginationResult<UserDTO>> GetUsers(int page = 1, int pageSize = 10, string search = "")
@@ -50,6 +53,7 @@ namespace ReEV.Service.Auth.Services
             {
                 return null;
             }
+            await _publisher.PublishUserUpsertedAsync(new UserUpsertedV1(updatedUser.Id, updatedUser.Email, updatedUser.FullName, updatedUser.PhoneNumber, updatedUser.AvatarUrl));
             return _mapper.Map<UserDTO>(updatedUser);
         }
 
@@ -58,6 +62,7 @@ namespace ReEV.Service.Auth.Services
             var userEntity = _mapper.Map<User>(userCreateDto);
 
             var newUser = await _repository.CreateAsync(userEntity);
+            await _publisher.PublishUserUpsertedAsync(new UserUpsertedV1(newUser.Id, newUser.Email, newUser.FullName, newUser.PhoneNumber, newUser.AvatarUrl));
 
             return _mapper.Map<UserDTO>(newUser);
         }

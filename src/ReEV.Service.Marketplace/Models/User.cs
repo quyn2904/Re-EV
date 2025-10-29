@@ -13,17 +13,8 @@
         public ICollection<Complaint> ComplaintsMade { get; set; } = new List<Complaint>();
         public ICollection<Complaint> ComplaintsReceived { get; set; } = new List<Complaint>();
 
-        private User(Guid id, string fullName, string avatarUrl, UserStatus status) 
+        public User()
         {
-            Id = id;
-            FullName = fullName;
-            AvatarUrl = avatarUrl;
-            Status = status;
-        }
-
-        public static User Create(Guid id, string fullName, string avatarUrl, UserStatus status)
-        {
-            return new User(id, fullName, avatarUrl, status);
         }
     }
 }

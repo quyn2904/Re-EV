@@ -17,6 +17,7 @@ builder.Services.AddAutoMapper(config => config.LicenseKey = builder.Configurati
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<RabbitMQPublisher>();
 
 var app = builder.Build();
 
