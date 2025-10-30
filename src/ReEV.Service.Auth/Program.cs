@@ -2,16 +2,23 @@ using ReEV.Service.Auth.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ReEV.Service.Auth.Services;
 using ReEV.Service.Auth.Mappings;
+using ReEV.Service.Auth.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddControllers();
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthService>();
-
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    
+})
 builder.Services.AddAutoMapper(config => config.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"], typeof(UserProfile));
 
 builder.Services.AddEndpointsApiExplorer();

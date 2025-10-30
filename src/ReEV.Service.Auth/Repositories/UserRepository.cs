@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ReEV.Common.Contracts.Users;
 using ReEV.Service.Auth.Models;
+using ReEV.Service.Auth.Repositories.Interfaces;
 
 namespace ReEV.Service.Auth.Repositories
 {
@@ -81,10 +82,10 @@ namespace ReEV.Service.Auth.Repositories
             return existingUser;
         }
 
-        public async Task<User?> GetByEmailOrPhoneAsync(string email, string phone)
+        public async Task<User?> GetByEmailOrPhoneAsync(string identifier)
         {
             return await _appDbContext.Users
-                .FirstOrDefaultAsync(x => x.Email == email || x.PhoneNumber == phone);
+                .FirstOrDefaultAsync(x => x.Email == identifier || x.PhoneNumber == identifier);
         }
     }
 }
