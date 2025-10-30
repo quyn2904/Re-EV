@@ -1,13 +1,22 @@
-﻿using ReEV.Service.Auth.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ReEV.Service.Auth.Models;
 using ReEV.Service.Auth.Repositories.Interfaces;
 
 namespace ReEV.Service.Auth.Repositories
 {
     public class RefreshTokenRepository : IRefreshTokenRepository
     {
-        public Task<RefreshToken> CreateAsync(RefreshToken entity)
+        private readonly AppDbContext _appDbContext;
+        public RefreshTokenRepository(AppDbContext appDbContext)
         {
-            throw new NotImplementedException();
+            _appDbContext = appDbContext;
+        }
+
+        public async Task<RefreshToken> CreateAsync(RefreshToken entity)
+        {
+            await _appDbContext.RefreshTokens.AddAsync(entity);
+            await _appDbContext.SaveChangesAsync();
+            return entity;
         }
 
         public Task<RefreshToken?> DeleteAsync(Guid id)
@@ -25,9 +34,30 @@ namespace ReEV.Service.Auth.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<RefreshToken?> UpdateAsync(Guid id, RefreshToken entity)
+        public async Task<RefreshToken?> UpdateAsync(Guid id, RefreshToken entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<RefreshToken?> GetRefreshTokenByUserIdAndToken(Guid userId, string token)
+        {
+            return await _appDbContext.RefreshTokens.FirstOrDefaultAsync(x => x.UserId == userId && x.Token == token);
+
+        }
+
+        public async Task<RefreshToken?> UpdateAsync(Guid id)
+        {
+            var existingToken = await _appDbContext.RefreshTokens.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingToken is null)
+            {
+                return null;
+            }
+
+            existingToken.IsActive = false;
+
+            await _appDbContext.SaveChangesAsync();
+            return existingToken;
         }
     }
 }

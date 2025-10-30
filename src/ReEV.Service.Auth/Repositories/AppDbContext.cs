@@ -8,6 +8,6 @@ namespace ReEV.Service.Auth.Repositories
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<RefreshToken> Sessions { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }
