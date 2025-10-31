@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using ReEV.Service.Auth.DTOs;
 using ReEV.Service.Auth.Models;
 using ReEV.Service.Auth.Repositories.Interfaces;
@@ -16,16 +14,16 @@ namespace ReEV.Service.Auth.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
-        private readonly UserService _userService;
+        private readonly IUserRepository _userRepository;
 
-        public TokenService(IConfiguration configuration, IRefreshTokenRepository refreshTokenRepo, UserService userService)
+        public TokenService(IConfiguration configuration, IRefreshTokenRepository refreshTokenRepo, IUserRepository userRepository)
         {
             _configuration = configuration;
             _refreshTokenRepository = refreshTokenRepo;
-            _userService = userService;
+            _userRepository = userRepository;
         }
 
-        public async Task<TokenResponseDTO> GenerateTokensAsync(UserDTO user)
+        public async Task<TokenResponseDTO> GenerateTokensAsync(User user)
         {
             string accessToken = GenerateAccessToken(user);
             string refreshToken = GenerateRefreshToken();
@@ -75,7 +73,7 @@ namespace ReEV.Service.Auth.Services
                 throw new SecurityTokenException("Invalid refresh token");
             }
 
-            var user = await _userService.GetUserById(Guid.Parse(userId));
+            var user = await _userRepository.GetByIdAsync(Guid.Parse(userId));
             var newAccessToken = GenerateAccessToken(user);
             var newRefreshToken = GenerateRefreshToken();
             var expiryDate = DateTimeOffset.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:RefreshTokenExpiryMinutes"]));
@@ -95,7 +93,7 @@ namespace ReEV.Service.Auth.Services
             };
         }
 
-        private string GenerateAccessToken(UserDTO user)
+        private string GenerateAccessToken(User user)
         {
             var claims = new List<Claim>
             {
@@ -104,7 +102,7 @@ namespace ReEV.Service.Auth.Services
             };
 
             var jwtSettings = _configuration.GetSection("Jwt");
-            var secretKey = jwtSettings["Key"];
+            var secretKey = jwtSettings["Secret"];
             var issuer = jwtSettings["Issuer"];
             var audience = jwtSettings["Audience"];
 
@@ -149,7 +147,7 @@ namespace ReEV.Service.Auth.Services
                 ValidIssuer = jwtSettings["Issuer"],
                 ValidAudience = jwtSettings["Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtSettings["Key"])
+                Encoding.UTF8.GetBytes(jwtSettings["Secret"])
             ),
                 ValidateLifetime = false
             };

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReEV.Service.Auth.DTOs;
-using ReEV.Service.Auth.Services;
+using ReEV.Service.Auth.Services.Interfaces;
 
 namespace ReEV.Service.Auth.Controllers
 {
@@ -8,9 +8,9 @@ namespace ReEV.Service.Auth.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly UserService _service;
+        private readonly IUserService _service;
 
-        public UsersController(UserService service)
+        public UsersController(IUserService service)
         {
             _service = service;
         }

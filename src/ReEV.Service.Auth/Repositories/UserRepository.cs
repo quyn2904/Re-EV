@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReEV.Common.Contracts.Users;
 using ReEV.Service.Auth.Models;
 using ReEV.Service.Auth.Repositories.Interfaces;
 

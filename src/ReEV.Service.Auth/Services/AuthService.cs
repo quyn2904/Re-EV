@@ -1,22 +1,24 @@
 ﻿using AutoMapper;
 using ReEV.Service.Auth.DTOs;
+using ReEV.Service.Auth.Helpers;
 using ReEV.Service.Auth.Repositories.Interfaces;
+using ReEV.Service.Auth.Services.Interfaces;
 
 namespace ReEV.Service.Auth.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
-        private readonly UserService _userService;
-        private readonly TokenService _tokenService;
+        private readonly IUserService _userService;
+        private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
 
         public AuthService(
             IConfiguration configuration,
             IUserRepository userRepository,
-            UserService userService,
-            TokenService tokenService,
+            IUserService userService,
+            ITokenService tokenService,
             IMapper mapper)
         {
             _configuration = configuration;
@@ -33,7 +35,8 @@ namespace ReEV.Service.Auth.Services
             {
                 throw new BadHttpRequestException("Email or Phone number already exists.");
             }
-
+            string hashedPassword = PasswordHelper.HashPassword(registerDto.Password);
+            registerDto.Password = hashedPassword;
             var newUserDto = await _userService.CreateUser(registerDto);
 
             return newUserDto;
@@ -48,7 +51,7 @@ namespace ReEV.Service.Auth.Services
                 throw new UnauthorizedAccessException("Invalid credentials.");
             }
 
-            if (loginDto.Password != user.Password)
+            if (!PasswordHelper.VerifyPassword(user.Password, loginDto.Password))
             {
                 throw new UnauthorizedAccessException("Invalid credentials.");
             }
@@ -62,7 +65,7 @@ namespace ReEV.Service.Auth.Services
 
             return new LoginResponseDTO
             {
-                TokenResponse = tokens,
+                Token = tokens,
                 User = _mapper.Map<UserDTO>(user)
             };
         }
