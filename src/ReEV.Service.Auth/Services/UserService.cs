@@ -2,11 +2,12 @@
 using ReEV.Common.Contracts.Users;
 using ReEV.Service.Auth.DTOs;
 using ReEV.Service.Auth.Models;
-using ReEV.Service.Auth.Repositories;
+using ReEV.Service.Auth.Repositories.Interfaces;
+using ReEV.Service.Auth.Services.Interfaces;
 
 namespace ReEV.Service.Auth.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository _repository;
         private readonly IMapper _mapper;

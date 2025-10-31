@@ -10,7 +10,7 @@
         public float Balance { get; set; } = 0;
         public UserRole Role { get; set; } = UserRole.MEMBER;
         public UserStatus Status { get; set; } = UserStatus.UNVERIFIED;
-        public ICollection<Session> Sessions { get; set; } = new List<Session>();
+        public ICollection<RefreshToken> Sessions { get; set; } = new List<RefreshToken>();
 
         public User()
         {

@@ -26,6 +26,11 @@ jobs:
           echo "RABBITMQ_HOSTNAME=${{ secrets.RABBITMQ_HOSTNAME }}" >> .env
           echo "RABBITMQ_USERNAME=${{ secrets.RABBITMQ_USERNAME }}" >> .env
           echo "RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }}" >> .env
+          echo "JWT_ISSUER=${{ secrets.RABBITMQ_VHOST }}" >> .env
+          echo "JWT_AUDIENCE=${{ secrets.RABBITMQ_VHOST }}" >> .env
+          echo "JWT_SECRET=${{ secrets.RABBITMQ_VHOST }}" >> .env
+          echo "JWT_ACCESSTOKENEXPIRYMINUTES=${{ secrets.RABBITMQ_VHOST }}" >> .env
+          echo "JWT_REFRESHTOKENEXPIRYDAYS=${{ secrets.RABBITMQ_VHOST }}" >> .env
 
       - name: Build and run Docker Compose
         run: |
